@@ -1,0 +1,32 @@
+package com.example.demo.Model;
+
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Data
+
+public class Sottomissione {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    //Hackathon a cui appartiene la sottomissione
+    @ManyToOne
+    @JoinColumn(name = "hackathon_id")
+    private Hackathon hackathon;
+
+    //team che ha creato la sottomissione
+    @OneToOne
+    @JoinColumn(name="team_id")
+    private Team team;
+
+    //campi per la valutazione
+    private int punteggio;
+    private String giudizio;
+
+    //link del progetto nella sottomissione
+    private String link;
+
+}
