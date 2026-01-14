@@ -3,7 +3,7 @@ package com.example.demo.DTO;
 import lombok.Data;
 
 @Data
-public class SottomissioniDTO {
+public class SottomissioneDTO {
     private Long idTeam;
     private Long idHackathon;
     private String link;

@@ -22,6 +22,8 @@ public class Sottomissione {
     @JoinColumn(name="team_id")
     private Team team;
 
+    private String description;
+
     //campi per la valutazione
     private int punteggio;
     private String giudizio;

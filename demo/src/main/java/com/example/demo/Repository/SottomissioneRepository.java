@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SottommissioneRepository extends JpaRepository<Sottomissione, Long> {
+public interface SottomissioneRepository extends JpaRepository<Sottomissione, Long> {
 
     Optional<Sottomissione> findByTeamId(Long teamId);
 
