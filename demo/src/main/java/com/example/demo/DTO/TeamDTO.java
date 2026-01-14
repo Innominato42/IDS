@@ -6,4 +6,5 @@ import lombok.Data;
 public class TeamDTO {
 
     private String nome;
+    private
 }

@@ -36,6 +36,11 @@ public class TeamService {
         return teamRepository.save(nuovoTeam);
     }
 
+    public void aggiungiMembro(Long teamId, Long utenteId)
+    {
+
+    }
+
     public List<Team> findTeamPerHackathon(Long hackathonId) {
         return teamRepository.findByHackathonId(hackathonId);
     }
