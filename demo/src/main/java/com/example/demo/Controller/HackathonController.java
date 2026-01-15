@@ -60,10 +60,33 @@ public class HackathonController {
 
     }
 
-    @PutMapping("{id}/avvia")
-    public ResponseEntity<String> avviaHackathon(@PathVariable Long id)
-    {
-        hackathonService.avviaHackathon(id);
-        return ResponseEntity.ok("Hackathon avviato");
+    @PutMapping("/{id}/avvia")
+    public ResponseEntity<String> avviaHackathon(@PathVariable Long id) {
+        try {
+            hackathonService.avviaHackathon(id);
+            return ResponseEntity.ok("Hackathon avviato con successo! Le iscrizioni sono chiuse.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/stop")
+    public ResponseEntity<String> stopHackathon(@PathVariable Long id) {
+        try {
+            hackathonService.stopHackathon(id);
+            return ResponseEntity.ok("Hackathon terminato. Inizia la fase di valutazione.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PutMapping("/{id}/concludi")
+    public ResponseEntity<String> concludiHackathon(@PathVariable Long id) {
+        try {
+            hackathonService.concludiHackathon(id); // Devi aggiungere questo metodo nel Service
+            return ResponseEntity.ok("Hackathon concluso definitivamente.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

@@ -22,13 +22,17 @@ public class Sottomissione {
     @JoinColumn(name="team_id")
     private Team team;
 
+    //link del progetto nella sottomissione
+    private String link;
     private String description;
 
     //campi per la valutazione
     private int punteggio;
+    @Column(length = 1000)
     private String giudizio;
 
-    //link del progetto nella sottomissione
-    private String link;
+    @ManyToOne
+    @JoinColumn(name="giudice_id")
+    private Utente giudice;
 
 }

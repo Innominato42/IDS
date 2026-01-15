@@ -44,23 +44,35 @@ public class HackathonService {
 
     }
 
+    @Transactional
     public void avviaHackathon(Long hackathonId) {
         Hackathon hackathon =hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon not found"));
         hackathon.cambiaStato(new InCorsoState());
         hackathonRepository.save(hackathon);
     }
 
+    @Transactional
     public void chiudiHackathonPerValutazione(Long hackathonId) {
         Hackathon hackathon =hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon not found"));
         hackathon.cambiaStato(new InValutazioneState());
         hackathonRepository.save(hackathon);
     }
 
+    @Transactional
     public void concludiHackathon(Long hackathonId) {
         Hackathon hackathon =hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon not found"));
         hackathon.cambiaStato(new ConclusoState());
         hackathonRepository.save(hackathon);
     }
+
+    public void stopHackathon(Long hackathonId) {
+        Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon not found"));
+
+        hackathon.stop();
+
+        hackathonRepository.save(hackathon);
+    }
+
 
     public List<Hackathon> getAllHackathon() {
         return hackathonRepository.findAll();

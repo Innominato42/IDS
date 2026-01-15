@@ -70,6 +70,12 @@ public class Hackathon {
         }
         this.statoCorrente.iscriviTeam(this,team);
     }
+
+    public void stop()
+    {
+        this.statoCorrente.stop(this);
+    }
+
     public void gestisciSottomissione(Sottomissione sottomissione)
     {
         if(statoCorrente==null)
@@ -85,6 +91,11 @@ public class Hackathon {
             inizializzaStato();
         }
         this.statoCorrente.gestisciValutazione(this, sottomissione);
+    }
+
+    public void inviaSottomissione(Sottomissione sottomissione)
+    {
+        this.statoCorrente.gestisciSottomissione(sottomissione,this);
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.DTO.SottomissioneDTO;
 import com.example.demo.Model.Hackathon;
 import com.example.demo.Model.Sottomissione;
 import com.example.demo.Model.Team;
@@ -23,24 +24,29 @@ public class SottomissioneService {
     private SottomissioneRepository sottomissioneRepository;
 
     @Transactional
-    public Sottomissione creaSottomissione(Long hackathonId, Long teamId, String link, String descrizione) {
+    public Sottomissione creaSottomissione(SottomissioneDTO sottomissione, Long utenteId) {
 
-        Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon non trovato"));
+        Team team= teamRepository.findById(sottomissione.getIdTeam()).orElseThrow(()-> new RuntimeException("Team non trovato"));
 
-        Team team = teamRepository.findById(teamId).orElseThrow(() -> new RuntimeException("Team non trovato"));
-        //Controllo che il team sia davvero iscritto all' hackathon
-        if(team.getHackathon()==null || !team.getHackathon().getId().equals(hackathonId)) {
-            throw new IllegalArgumentException("Errore : Il team non e' iscritto al hackathon");
+        Hackathon hackathon=team.getHackathon();
+
+        Sottomissione s = sottomissioneRepository.findByTeamId(team.getId()).orElse(new Sottomissione());
+
+        if(s.getId()==null )
+        {
+            s.setTeam(team);
+            s.setHackathon(hackathon);
         }
+        s.setLink(sottomissione.getLink());
+        s.setDescription(s.getDescription());
+        hackathon.inviaSottomissione(s);
 
-        Sottomissione nuovaSottomissione =new Sottomissione();
-        nuovaSottomissione.setLink(link);
-        nuovaSottomissione.setDescription(descrizione);
+        return sottomissioneRepository.save(s);
 
-        nuovaSottomissione.setTeam(team);
-        nuovaSottomissione.setHackathon(hackathon);
+    }
 
-        return sottomissioneRepository.save(nuovaSottomissione);
-
+    public Sottomissione getSottomissionePerTeam(Long teamId) {
+        return sottomissioneRepository.findByTeamId(teamId)
+                .orElseThrow(() -> new RuntimeException("Nessuna sottomissione trovata per questo team"));
     }
 }
