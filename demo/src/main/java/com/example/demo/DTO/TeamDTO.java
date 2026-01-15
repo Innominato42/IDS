@@ -6,5 +6,6 @@ import lombok.Data;
 public class TeamDTO {
 
     private String nome;
-    private
+    private Long hackathonId;
+    private Long creatoreId;
 }

@@ -47,9 +47,14 @@ public class HackathonController {
     public ResponseEntity<String> iscriviTeam(@PathVariable Long id, @RequestBody TeamDTO teamDTO)
     {
         try{
-            teamService.iscriviTeam(id, teamDTO);
-            return ResponseEntity.ok("Team "+teamDTO.getNome() +" iscritto");
-        } catch (RuntimeException e) {
+            /*
+             * Salvo l id passato come parametro nel DTO per essere sicuro che il team si iscriva all' hackathon specificato
+             */
+            teamDTO.setHackathonId(id);
+
+            Team teamSalvato = teamService.iscriviTeam(teamDTO);
+            return ResponseEntity.ok(teamSalvato.getNome());
+        } catch (RuntimeException e){
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
