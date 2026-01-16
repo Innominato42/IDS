@@ -2,11 +2,13 @@ package com.example.demo.Service;
 
 import com.example.demo.Model.*;
 import com.example.demo.Repository.HackathonRepository;
+import com.example.demo.Repository.SottomissioneRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -14,6 +16,12 @@ public class HackathonService {
 
     @Autowired
     private HackathonRepository hackathonRepository;
+
+    @Autowired
+    private PagamentoService pagamentoService;
+    @Autowired
+    private SottomissioneRepository sottomissioneRepository;
+
     /*
     Creo un nuovo Hackathon usando il design pattern Builder
     Con questo metodo riceviamo dati grezzi e li trasformiamo in un oggetto Hackathon completo
@@ -62,6 +70,24 @@ public class HackathonService {
     public void concludiHackathon(Long hackathonId) {
         Hackathon hackathon =hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon not found"));
         hackathon.cambiaStato(new ConclusoState());
+        List<Sottomissione> sottomissioni = sottomissioneRepository.findByHackathonId(hackathonId);
+        Sottomissione vincitrice = sottomissioni.stream()
+                .filter(s -> s.getPunteggio() != null) // Prendiamo solo quelle votate
+                .max(Comparator.comparing(Sottomissione::getPunteggio)) // Cerchiamo il voto più alto
+                .orElse(null);
+
+        if(vincitrice != null)
+        {
+            Team teamVincente=vincitrice.getTeam();
+            Double premio = hackathon.getPremio();
+            System.out.println("Vincitore: "+teamVincente.getNome());
+
+            if(premio !=null && premio>0)
+            {
+                pagamentoService.effettuaPagamento(teamVincente.getNome(),premio);
+            }
+        }
+
         hackathonRepository.save(hackathon);
     }
 

@@ -27,7 +27,7 @@ public class Sottomissione {
     private String description;
 
     //campi per la valutazione
-    private int punteggio;
+    private Integer punteggio;
     @Column(length = 1000)
     private String giudizio;
 

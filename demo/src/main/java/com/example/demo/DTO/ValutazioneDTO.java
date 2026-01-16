@@ -7,7 +7,7 @@ public class ValutazioneDTO {
 
     private Long sottomissioneId;
     private Long giudiceId;
-    private int punteggio;
+    private Integer punteggio;
     private String giudizio;
 
 }
