@@ -1,12 +1,15 @@
 package com.example.demo.Service;
 
 import com.example.demo.DTO.SottomissioneDTO;
+import com.example.demo.DTO.ValutazioneDTO;
 import com.example.demo.Model.Hackathon;
 import com.example.demo.Model.Sottomissione;
 import com.example.demo.Model.Team;
+import com.example.demo.Model.Utente;
 import com.example.demo.Repository.HackathonRepository;
 import com.example.demo.Repository.SottomissioneRepository;
 import com.example.demo.Repository.TeamRepository;
+import com.example.demo.Repository.UtenteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,9 @@ public class SottomissioneService {
 
     @Autowired
     private SottomissioneRepository sottomissioneRepository;
+
+    @Autowired
+    private UtenteRepository utenteRepository;
 
     @Transactional
     public Sottomissione creaSottomissione(SottomissioneDTO sottomissione, Long utenteId) {
@@ -43,6 +49,29 @@ public class SottomissioneService {
 
         return sottomissioneRepository.save(s);
 
+    }
+
+    @Transactional
+    public Sottomissione valutaSottomissione(ValutazioneDTO valutazione) {
+
+        Sottomissione sottomissione = sottomissioneRepository.findById(valutazione.getSottomissioneId()).orElseThrow(()->new RuntimeException("Sottomissione non trovata"));
+        Hackathon hackathon=sottomissione.getHackathon();
+        Utente giudice = hackathon.getGiudice();
+
+        if(giudice==null)
+        {
+            throw new IllegalStateException("Questo hackathon non ha ancora un giudice");
+        }
+        if(!"GIUDICE".equals(giudice.getRuolo().toString()))
+        {
+            throw new IllegalArgumentException("L'utente non è un giudice");
+        }
+        hackathon.gestisciValutazione(sottomissione);
+        sottomissione.setPunteggio(valutazione.getPunteggio());
+        sottomissione.setGiudice(giudice);
+        sottomissione.setGiudizio(valutazione.getGiudizio());
+
+        return sottomissioneRepository.save(sottomissione);
     }
 
     public Sottomissione getSottomissionePerTeam(Long teamId) {

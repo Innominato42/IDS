@@ -37,6 +37,10 @@ public class Hackathon {
     @Transient
     private HackathonState statoCorrente;
 
+    @ManyToOne
+    @JoinColumn(name="giudice_id")
+    private Utente giudice;
+
     private void inizializzaStato()
     {
         if("IN_ISCRIZIONE".equals(statoString))
@@ -97,6 +101,7 @@ public class Hackathon {
     {
         this.statoCorrente.gestisciSottomissione(sottomissione,this);
     }
+
 
 
 }
