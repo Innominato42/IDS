@@ -1,5 +1,6 @@
 package com.example.demo.Service;
 
+import com.example.demo.DTO.VincitoreDTO;
 import com.example.demo.Model.*;
 import com.example.demo.Repository.HackathonRepository;
 import com.example.demo.Repository.SottomissioneRepository;
@@ -68,31 +69,49 @@ public class HackathonService {
 
     @Transactional
     public void concludiHackathon(Long hackathonId) {
-        Hackathon hackathon =hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon not found"));
+        Hackathon hackathon = hackathonRepository.findById(hackathonId)
+                .orElseThrow(() -> new RuntimeException("Hackathon non trovato"));
         hackathon.cambiaStato(new ConclusoState());
-        List<Sottomissione> sottomissioni = sottomissioneRepository.findByHackathonId(hackathonId);
-        Sottomissione vincitrice = sottomissioni.stream()
-                .filter(s -> s.getPunteggio() != null) // Prendiamo solo quelle votate
-                .max(Comparator.comparing(Sottomissione::getPunteggio)) // Cerchiamo il voto più alto
+
+        List<Sottomissione> sottomissioni= sottomissioneRepository.findByHackathonId(hackathonId);
+        Sottomissione sottomissioneVincente = sottomissioni.stream()
+                .filter(s -> s.getPunteggio() != null)
+                .max(Comparator.comparing(Sottomissione::getPunteggio))
                 .orElse(null);
-
-        if(vincitrice != null)
-        {
-            Team teamVincente=vincitrice.getTeam();
-            Double premio = hackathon.getPremio();
-            System.out.println("Vincitore: "+teamVincente.getNome());
-
-            if(premio !=null && premio>0)
-            {
-                pagamentoService.effettuaPagamento(teamVincente.getNome(),premio);
+        if (sottomissioneVincente != null) {
+            Team teamVincente = sottomissioneVincente.getTeam();
+            hackathon.setVincitore(teamVincente);
+            if(hackathon.getPremio() > 0) {
+                pagamentoService.effettuaPagamento(teamVincente.getNome(), hackathon.getPremio());
             }
-        }
 
+        }
         hackathonRepository.save(hackathon);
     }
 
+    public VincitoreDTO getVincitore(Long hackathonId)
+    {
+        Hackathon hackathon= hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon non trovato"));
+        if (hackathon.getVincitore() == null) {
+            throw new RuntimeException("Il vincitore non è stato ancora proclamato (o nessun voto assegnato).");
+        }
+
+        Team t = hackathon.getVincitore();
+        Sottomissione s = sottomissioneRepository.findByTeamId(t.getId()).orElse(new Sottomissione());
+        VincitoreDTO dto = new VincitoreDTO();
+        dto.setNomeHackathon(hackathon.getNome());
+        dto.setPremio(hackathon.getPremio());
+        dto.setNomeTeam(hackathon.getVincitore().getNome());
+        dto.setPunteggio(s.getPunteggio());
+        dto.setPremio(hackathon.getPremio());
+        dto.setNomeCreatore(t.getCreatore().getUsername());
+
+        return dto;
+    }
+
+
     public void stopHackathon(Long hackathonId) {
-        Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon not found"));
+        Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon non trovato"));
 
         hackathon.stop();
 

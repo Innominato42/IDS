@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.DTO.HackathonDTO;
 import com.example.demo.DTO.TeamDTO;
+import com.example.demo.DTO.VincitoreDTO;
 import com.example.demo.Model.Hackathon;
 import com.example.demo.Model.Team;
 import com.example.demo.Service.HackathonService;
@@ -87,6 +88,16 @@ public class HackathonController {
             return ResponseEntity.ok("Hackathon concluso definitivamente.");
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/{id}/vincitore")
+    public ResponseEntity<?> ottieniVincitore(@PathVariable Long id) {
+        try {
+            VincitoreDTO vincitore = hackathonService.getVincitore(id);
+            return ResponseEntity.ok(vincitore);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(404).body("Nessun vincitore proclamato: " + e.getMessage());
         }
     }
 }

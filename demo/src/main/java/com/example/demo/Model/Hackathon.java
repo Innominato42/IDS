@@ -41,6 +41,10 @@ public class Hackathon {
     @JoinColumn(name="giudice_id")
     private Utente giudice;
 
+    @OneToOne
+    @JoinColumn(name= "vincitore_id")
+    private Team vincitore;
+
     private void inizializzaStato()
     {
         if("IN_ISCRIZIONE".equals(statoString))
