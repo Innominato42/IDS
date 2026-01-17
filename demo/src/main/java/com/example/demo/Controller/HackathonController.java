@@ -100,4 +100,45 @@ public class HackathonController {
             return ResponseEntity.status(404).body("Nessun vincitore proclamato: " + e.getMessage());
         }
     }
+
+
+    @PutMapping("/{id}/aggiungi-mentore")
+    public ResponseEntity<?> aggiungiMentore(@PathVariable Long hackathonId, @RequestParam Long mentore_id ){
+        try
+        {
+            hackathonService.aggiungiMentore(hackathonId, mentore_id);
+            return ResponseEntity.ok("Mentore aggiunto con successo");
+        } catch (IllegalArgumentException e)
+        {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (RuntimeException e)
+        {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+
+    }
+
+    @GetMapping("{id}/mentori")
+    public ResponseEntity<?> getMentori(@PathVariable Long hackathonId) {
+        return ResponseEntity.ok(hackathonService.getMentoriHackathon(hackathonId));
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -45,6 +45,14 @@ public class Hackathon {
     @JoinColumn(name= "vincitore_id")
     private Team vincitore;
 
+    @ManyToMany
+    @JoinTable(
+            name="hackathon_mentori",
+            joinColumns = @JoinColumn(name="hackathon_id"),
+            inverseJoinColumns = @JoinColumn(name = "mentore_id")
+    )
+    private List<Utente> mentori = new ArrayList<>();
+
     private void inizializzaStato()
     {
         if("IN_ISCRIZIONE".equals(statoString))
@@ -106,6 +114,10 @@ public class Hackathon {
         this.statoCorrente.gestisciSottomissione(sottomissione,this);
     }
 
+    public void addMentore(Utente mentore)
+    {
+        this.mentori.add(mentore);
+    }
 
 
 }

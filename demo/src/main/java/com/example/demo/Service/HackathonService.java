@@ -4,6 +4,7 @@ import com.example.demo.DTO.VincitoreDTO;
 import com.example.demo.Model.*;
 import com.example.demo.Repository.HackathonRepository;
 import com.example.demo.Repository.SottomissioneRepository;
+import com.example.demo.Repository.UtenteRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +18,12 @@ public class HackathonService {
 
     @Autowired
     private HackathonRepository hackathonRepository;
-
     @Autowired
     private PagamentoService pagamentoService;
     @Autowired
     private SottomissioneRepository sottomissioneRepository;
+    @Autowired
+    private UtenteRepository utenteRepository;
 
     /*
     Creo un nuovo Hackathon usando il design pattern Builder
@@ -118,8 +120,33 @@ public class HackathonService {
         hackathonRepository.save(hackathon);
     }
 
+    @Transactional
+    public void aggiungiMentore(Long hackathonId, Long mentoreId) {
+        Hackathon hackathon= hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon non trovato"));
+
+        Utente mentore= utenteRepository.findById(mentoreId).orElseThrow(() -> new RuntimeException("Utente non trovato"));
+
+        if(!"MENTORE".equalsIgnoreCase(mentore.getRuolo().toString()))
+        {
+            throw new IllegalArgumentException("L'utente selezionato non e' un mentore");
+        }
+
+        if(hackathon.getMentori().contains(mentore))
+        {
+            throw new IllegalArgumentException("L'utente selezionato è gia un mentore");
+        }
+
+        hackathon.addMentore(mentore);
+        hackathonRepository.save(hackathon);
+    }
+
 
     public List<Hackathon> getAllHackathon() {
         return hackathonRepository.findAll();
+    }
+
+    public List<Utente> getMentoriHackathon(Long hackathonId) {
+        Hackathon hackathon= hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon non trovato"));
+        return hackathon.getMentori();
     }
 }

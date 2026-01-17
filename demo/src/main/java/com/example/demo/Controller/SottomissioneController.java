@@ -20,7 +20,7 @@ public class SottomissioneController {
 
 
     @PostMapping("/invia")
-    public ResponseEntity<?> creaSottomissione(@RequestBody SottomissioneDTO sottomissioneDTO, @RequestParam Long userId) {
+    public ResponseEntity<?> inviaSottomissione(@RequestBody SottomissioneDTO sottomissioneDTO, @RequestParam Long userId) {
         try
         {
             Sottomissione s = sottomissioneService.creaSottomissione(sottomissioneDTO, userId);
@@ -49,10 +49,7 @@ public class SottomissioneController {
         {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-        catch (RuntimeException e){
 
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
 

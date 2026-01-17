@@ -41,4 +41,19 @@ public class MentoreController {
     public ResponseEntity<List<RichiestaSupporto>> getRichiesteMentore(@PathVariable Long id) {
         return ResponseEntity.ok(mentoreService.getRichiestaPerMentore(id));
     }
+
+    @GetMapping("/mentore/{mentoreId}")
+    public ResponseEntity<List<RichiestaSupporto>> getRichiestePerMentore(@PathVariable Long mentoreId) {
+        return ResponseEntity.ok(mentoreService.getRichiesteMentore(mentoreId));
+    }
+
+    @GetMapping("/team/{teamId}")
+    public ResponseEntity<List<RichiestaSupporto>> getRichiestePerTeam(@PathVariable Long teamId) {
+        return ResponseEntity.ok(mentoreService.getRichiesteDelTeam(teamId));
+    }
+
+    @GetMapping("/hackathon/{hackathonId")
+    public ResponseEntity<List<RichiestaSupporto>> getRichiestePerHackathon(@PathVariable Long hackathonId) {
+        return ResponseEntity.ok(mentoreService.getAllRichiesteHackathon(hackathonId));
+    }
 }

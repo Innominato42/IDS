@@ -66,4 +66,16 @@ public class MentoreService {
     {
         return richiestaSupportoRepository.findByMentoreId(mentoreId);
     }
+
+    public List<RichiestaSupporto> getRichiesteMentore(Long mentoreId)
+    {
+        return richiestaSupportoRepository.findByMentoreId(mentoreId);
+    }
+    public List<RichiestaSupporto> getRichiesteDelTeam(Long teamId){
+        return richiestaSupportoRepository.findByTeamId(teamId);
+    }
+
+    public List<RichiestaSupporto> getAllRichiesteHackathon(Long hackathonId){
+        return richiestaSupportoRepository.findByTeam_Hackathon_id(hackathonId);
+    }
 }

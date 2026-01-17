@@ -11,4 +11,6 @@ public interface RichiestaSupportoRepository extends JpaRepository<RichiestaSupp
 
     List<RichiestaSupporto> findByTeamId(Long teamId);
 
+    List<RichiestaSupporto> findByTeam_Hackathon_id(Long hackathon_id);
+
 }

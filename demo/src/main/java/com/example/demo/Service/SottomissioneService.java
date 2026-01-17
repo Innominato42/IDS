@@ -14,6 +14,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class SottomissioneService {
 
@@ -30,24 +32,40 @@ public class SottomissioneService {
     private UtenteRepository utenteRepository;
 
     @Transactional
-    public Sottomissione creaSottomissione(SottomissioneDTO sottomissione, Long utenteId) {
+    public Sottomissione creaSottomissione(SottomissioneDTO sottomissioneDTO, Long utenteId) {
 
-        Team team= teamRepository.findById(sottomissione.getIdTeam()).orElseThrow(()-> new RuntimeException("Team non trovato"));
+        Team team= teamRepository.findById(sottomissioneDTO.getIdTeam()).orElseThrow(()-> new RuntimeException("Team non trovato"));
 
         Hackathon hackathon=team.getHackathon();
-
-        Sottomissione s = sottomissioneRepository.findByTeamId(team.getId()).orElse(new Sottomissione());
-
-        if(s.getId()==null )
+        if(hackathon==null)
         {
-            s.setTeam(team);
-            s.setHackathon(hackathon);
+            throw new RuntimeException("Il team non è iscritto a nessun hackathon");
         }
-        s.setLink(sottomissione.getLink());
-        s.setDescription(s.getDescription());
-        hackathon.inviaSottomissione(s);
 
-        return sottomissioneRepository.save(s);
+        if(hackathon.getStatoCorrente().toString().equalsIgnoreCase("IN_CORSO"))
+        {
+            throw new RuntimeException("Non puoi più aggiornare o creare sottomissioni ");
+        }
+
+        Optional<Sottomissione> sottomissioneEsistente = sottomissioneRepository.findByTeamId(team.getId());
+        Sottomissione sottomissione;
+
+        //Controllo se il team ha gia fatto una sottomissione
+        if(sottomissioneEsistente.isPresent()){
+            sottomissione=sottomissioneEsistente.get();
+            sottomissione.setLink(sottomissioneDTO.getLink());
+            sottomissione.setDescription(sottomissioneDTO.getDescrizione());
+        }
+        //se il team non ha mai fatto una sottomissione la creo
+        else {
+            sottomissione = new Sottomissione();
+            sottomissione.setLink(sottomissioneDTO.getLink());
+            sottomissione.setDescription(sottomissioneDTO.getDescrizione());
+            sottomissione.setTeam(team);
+            sottomissione.setHackathon(hackathon);
+        }
+
+        return sottomissioneRepository.save(sottomissione);
 
     }
 
