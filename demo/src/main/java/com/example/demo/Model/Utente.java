@@ -1,6 +1,7 @@
 package com.example.demo.Model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
@@ -15,6 +16,8 @@ public class Utente {
     @Column(unique = true, nullable = false)
     private String username;
 
+    @JsonIgnore
+    @Column(nullable = false)
     private String password;
 
     @Column(unique = true, nullable = false)
