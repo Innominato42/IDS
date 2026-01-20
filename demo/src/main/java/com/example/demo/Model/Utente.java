@@ -24,6 +24,7 @@ public class Utente {
     private String email;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private Ruolo ruolo;
 
     @ManyToOne

@@ -4,5 +4,6 @@ public enum Ruolo {
     ORGANIZZATORE,
     MENTORE,
     GIUDICE,
-    UTENTE
+    UTENTE,
+    PARTECIPANTE
 }

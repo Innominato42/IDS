@@ -8,4 +8,5 @@ public class RegistrazioneDTO {
         private String username;
         private String password;
         private String ruolo;
+        private String email;
 }

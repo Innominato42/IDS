@@ -24,8 +24,8 @@ public class HackathonController {
         Crea un nuovo Hackathon
         Riceve un HackathonDTO e lo spacchetta fornendo i dati al service
      */
-    @PostMapping
-    public ResponseEntity<Hackathon> creaHackathon(@RequestBody HackathonDTO hackathonDTO) {
+    @PostMapping("/crea")
+    public ResponseEntity<Hackathon> creaHackathon(@RequestBody HackathonDTO hackathonDTO,Long organizzatoreId) {
         Hackathon hackathon = hackathonService.creaHackathon(
                 hackathonDTO.getNome(),
                 hackathonDTO.getDescrizione(),
@@ -35,7 +35,8 @@ public class HackathonController {
                 hackathonDTO.getRegolamento(),
                 hackathonDTO.getScadenzaIscrizioni(),
                 hackathonDTO.getLuogo(),
-                hackathonDTO.getPremio()
+                hackathonDTO.getPremio(),
+                organizzatoreId
         );
         return ResponseEntity.ok(hackathon);
     }

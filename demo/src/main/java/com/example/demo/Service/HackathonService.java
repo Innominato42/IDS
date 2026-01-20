@@ -29,7 +29,11 @@ public class HackathonService {
     Creo un nuovo Hackathon usando il design pattern Builder
     Con questo metodo riceviamo dati grezzi e li trasformiamo in un oggetto Hackathon completo
      */
-    public Hackathon creaHackathon(String nome, String descrizione, LocalDate dataInizio, LocalDate dataFine, int dimensioneTeam, String regolamento, LocalDate scandenza, String luogo, double premio) {
+    public Hackathon creaHackathon(String nome, String descrizione, LocalDate dataInizio, LocalDate dataFine, int dimensioneTeam, String regolamento, LocalDate scandenza, String luogo, double premio, Long organizzatoreId) {
+        Utente organizzatore = utenteRepository.findById(organizzatoreId).orElseThrow(()-> new RuntimeException("Utente non trovato"));
+        if (!organizzatore.getRuolo().equals(Ruolo.ORGANIZZATORE)) {
+            throw new RuntimeException("ERRORE: Solo gli Organizzatori possono creare un Hackathon!");
+        }
         Hackathon nuovoHackathon =  HackathonBuilder.newBuilder()
                 .creaNome(nome)
                 .creaDescrizione(descrizione)
@@ -41,6 +45,7 @@ public class HackathonService {
                 .creaPremio(premio)
                 .creaScadenzaIscrizioni(scandenza)
                 .build();
+        nuovoHackathon.setOrganizzatore(organizzatore);
         return hackathonRepository.save(nuovoHackathon);
     }
 

@@ -45,6 +45,10 @@ public class Hackathon {
     @JoinColumn(name= "vincitore_id")
     private Team vincitore;
 
+    @ManyToOne
+    @JoinColumn(name="organizzatore_id")
+    private Utente organizzatore;
+
     @ManyToMany
     @JoinTable(
             name="hackathon_mentori",

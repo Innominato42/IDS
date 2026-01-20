@@ -52,7 +52,7 @@ public class MentoreController {
         return ResponseEntity.ok(mentoreService.getRichiesteDelTeam(teamId));
     }
 
-    @GetMapping("/hackathon/{hackathonId")
+    @GetMapping("/hackathon/{hackathonId}")
     public ResponseEntity<List<RichiestaSupporto>> getRichiestePerHackathon(@PathVariable Long hackathonId) {
         return ResponseEntity.ok(mentoreService.getAllRichiesteHackathon(hackathonId));
     }
