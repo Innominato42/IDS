@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/hackathon")
+@RequestMapping("/api/sottomissione")
 public class SottomissioneController {
 
     @Autowired
@@ -27,7 +27,7 @@ public class SottomissioneController {
             return ResponseEntity.ok("Sottomissione inviata");
         } catch (IllegalStateException e)
         {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            return ResponseEntity.badRequest().body(" non puoi creare sottomissioni in questa fase" +e.getMessage());
         } catch (RuntimeException e)
         {
             return ResponseEntity.badRequest().body(e.getMessage());

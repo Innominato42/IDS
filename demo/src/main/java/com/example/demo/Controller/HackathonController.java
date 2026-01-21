@@ -25,7 +25,7 @@ public class HackathonController {
         Riceve un HackathonDTO e lo spacchetta fornendo i dati al service
      */
     @PostMapping("/crea")
-    public ResponseEntity<Hackathon> creaHackathon(@RequestBody HackathonDTO hackathonDTO,Long organizzatoreId) {
+    public ResponseEntity<Hackathon> creaHackathon(@RequestBody HackathonDTO hackathonDTO, @RequestParam Long organizzatoreId) {
         Hackathon hackathon = hackathonService.creaHackathon(
                 hackathonDTO.getNome(),
                 hackathonDTO.getDescrizione(),
@@ -104,10 +104,10 @@ public class HackathonController {
 
 
     @PutMapping("/{id}/aggiungi-mentore")
-    public ResponseEntity<?> aggiungiMentore(@PathVariable Long hackathonId, @RequestParam Long mentore_id ){
+    public ResponseEntity<?> aggiungiMentore(@PathVariable Long id, @RequestParam Long mentore_id ){
         try
         {
-            hackathonService.aggiungiMentore(hackathonId, mentore_id);
+            hackathonService.aggiungiMentore(id, mentore_id);
             return ResponseEntity.ok("Mentore aggiunto con successo");
         } catch (IllegalArgumentException e)
         {
@@ -120,26 +120,9 @@ public class HackathonController {
     }
 
     @GetMapping("{id}/mentori")
-    public ResponseEntity<?> getMentori(@PathVariable Long hackathonId) {
-        return ResponseEntity.ok(hackathonService.getMentoriHackathon(hackathonId));
+    public ResponseEntity<?> getMentori(@PathVariable Long id) {
+        return ResponseEntity.ok(hackathonService.getMentoriHackathon(id));
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

@@ -16,7 +16,7 @@ public class InIscrizioneState implements  HackathonState{
 
     @Override
     public void gestisciSottomissione(Sottomissione sottomissione,Hackathon hackathon) {
-        throw new IllegalStateException("Errore : non si possono fare sottomissioni durante questa fase");
+        throw new IllegalStateException("Errore : non si possono fare sottomissioni durante questa fase ");
     }
     @Override
     public String getNomeStato() {

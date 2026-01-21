@@ -60,6 +60,8 @@ public class HackathonService {
 
     }
 
+
+
     @Transactional
     public void avviaHackathon(Long hackathonId) {
         Hackathon hackathon =hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon not found"));

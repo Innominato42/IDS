@@ -36,16 +36,22 @@ public class SottomissioneService {
 
         Team team= teamRepository.findById(sottomissioneDTO.getIdTeam()).orElseThrow(()-> new RuntimeException("Team non trovato"));
 
+        boolean isMembro = team.getMembri().stream()
+                .anyMatch(membro -> membro.getId().equals(utenteId));
+
+        if (!isMembro) {
+            throw new RuntimeException("ERRORE: Devi far parte del team per poter inviare il progetto!");
+        }
         Hackathon hackathon=team.getHackathon();
         if(hackathon==null)
         {
             throw new RuntimeException("Il team non è iscritto a nessun hackathon");
         }
 
-        if(hackathon.getStatoCorrente().toString().equalsIgnoreCase("IN_CORSO"))
+        /*if(hackathon.getStatoCorrente().toString().equalsIgnoreCase("IN_CORSO"))
         {
             throw new RuntimeException("Non puoi più aggiornare o creare sottomissioni ");
-        }
+        }*/
 
         Optional<Sottomissione> sottomissioneEsistente = sottomissioneRepository.findByTeamId(team.getId());
         Sottomissione sottomissione;
@@ -64,6 +70,8 @@ public class SottomissioneService {
             sottomissione.setTeam(team);
             sottomissione.setHackathon(hackathon);
         }
+
+        hackathon.gestisciSottomissione(sottomissione);
 
         return sottomissioneRepository.save(sottomissione);
 

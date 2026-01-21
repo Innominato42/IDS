@@ -35,7 +35,7 @@ public class Hackathon {
     private List<Sottomissione> sottomissioni =new ArrayList<>();
 
     @Transient
-    private HackathonState statoCorrente;
+    private HackathonState statoCorrente ;
 
     @ManyToOne
     @JoinColumn(name="giudice_id")

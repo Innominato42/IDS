@@ -37,7 +37,7 @@ public class MentoreController {
         return ResponseEntity.ok(richiesta);
     }
 
-    @GetMapping("/mentore/{id}")
+    @GetMapping("/attive/{id}")
     public ResponseEntity<List<RichiestaSupporto>> getRichiesteMentore(@PathVariable Long id) {
         return ResponseEntity.ok(mentoreService.getRichiestaPerMentore(id));
     }
