@@ -32,7 +32,7 @@ public class InValutazioneState implements HackathonState{
 
     @Override
     public void concluso(Hackathon hackathon) {
-        hackathon.setStatoCorrente(new ConclusoState());
+        hackathon.cambiaStato(new ConclusoState());
         System.out.println("Hackathon concluso. Il vincitore e' stato decretato.");
     }
 }

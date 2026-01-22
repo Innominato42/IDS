@@ -57,6 +57,8 @@ public class Hackathon {
     )
     private List<Utente> mentori = new ArrayList<>();
 
+
+    @PostLoad
     private void inizializzaStato()
     {
         if("IN_ISCRIZIONE".equals(statoString))
@@ -67,7 +69,7 @@ public class Hackathon {
             this.statoCorrente = new InCorsoState();
         } else if ("IN_VALUTAZIONE".equals(statoString))
         {
-            this.statoCorrente = new InIscrizioneState();
+            this.statoCorrente = new InValutazioneState();
         } else if("CONCLUSO".equals(statoString))
         {
             this.statoCorrente = new ConclusoState();
@@ -93,6 +95,9 @@ public class Hackathon {
 
     public void stop()
     {
+        if (statoCorrente == null) {
+            inizializzaStato();
+        }
         this.statoCorrente.stop(this);
     }
 

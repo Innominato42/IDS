@@ -35,7 +35,7 @@ public class InCorsoState implements HackathonState{
 
     @Override
     public void stop(Hackathon hackathon) {
-        hackathon.setStatoCorrente(new InValutazioneState());
+        hackathon.cambiaStato(new InValutazioneState());
         System.out.println("Fase di valutazione iniziata");
     }
 

@@ -121,9 +121,7 @@ public class HackathonService {
 
     public void stopHackathon(Long hackathonId) {
         Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon non trovato"));
-
         hackathon.stop();
-
         hackathonRepository.save(hackathon);
     }
 
