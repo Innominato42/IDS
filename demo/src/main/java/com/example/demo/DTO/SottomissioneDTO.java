@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class SottomissioneDTO {
-    private Long idTeam;
+    private Long teamId;
     private String link;
     private String descrizione;
 }

@@ -123,5 +123,7 @@ public class Hackathon {
         this.mentori.add(mentore);
     }
 
+    public void addGiudice(Utente giudice){ this.giudice=giudice;}
+
 
 }

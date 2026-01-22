@@ -54,10 +54,10 @@ public class SottomissioneController {
 
 
     @GetMapping("/team/{teamId}")
-    public ResponseEntity<?> getSottomissioneTeam(@PathVariable Long userId) {
+    public ResponseEntity<?> getSottomissioneTeam(@PathVariable Long teamId) {
         try
         {
-            Sottomissione sottomissione= sottomissioneService.getSottomissionePerTeam(userId);
+            Sottomissione sottomissione= sottomissioneService.getSottomissionePerTeam(teamId);
             return ResponseEntity.ok(sottomissione);
         } catch (RuntimeException e)
         {

@@ -119,6 +119,22 @@ public class HackathonController {
 
     }
 
+    @PutMapping("/{id}/aggiungi-giudice")
+    public ResponseEntity<?> aggiungiGiudice(@PathVariable Long id, @RequestParam Long giudiceId)
+    {
+        try
+        {
+            hackathonService.aggiungiGiudice(id,giudiceId);
+            return ResponseEntity.ok("Giudice aggiunto con successo ");
+        } catch (IllegalArgumentException e)
+        {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }catch (RuntimeException e)
+        {
+            return ResponseEntity.status(404).body(e.getMessage());
+        }
+    }
+
     @GetMapping("{id}/mentori")
     public ResponseEntity<?> getMentori(@PathVariable Long id) {
         return ResponseEntity.ok(hackathonService.getMentoriHackathon(id));

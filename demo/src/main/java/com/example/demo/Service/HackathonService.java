@@ -147,6 +147,25 @@ public class HackathonService {
         hackathonRepository.save(hackathon);
     }
 
+    @Transactional
+    public void aggiungiGiudice(Long hackathonId, Long giudiceId)
+    {
+        Hackathon hackathon =hackathonRepository.findById(hackathonId).orElseThrow(()-> new RuntimeException("Hackathon non trovato"));
+
+        Utente giudice = utenteRepository.findById(giudiceId).orElseThrow(()-> new RuntimeException("Giudice non trovato"));
+
+        if(hackathon.getGiudice()!=null)
+        {
+            throw new IllegalArgumentException("L hackathon ha gia un giudice");
+        }
+
+        if(!"GIUDICE".equalsIgnoreCase(giudice.getRuolo().toString()))
+        {
+            throw new IllegalArgumentException("L'utente selezionato non e' un mentore");
+        }
+        hackathon.addGiudice(giudice);
+        hackathonRepository.save(hackathon);
+    }
 
     public List<Hackathon> getAllHackathon() {
         return hackathonRepository.findAll();
