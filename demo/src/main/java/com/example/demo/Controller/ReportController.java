@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 
 import com.example.demo.DTO.ReportDTO;
+import com.example.demo.DTO.ReportResponseDTO;
 import com.example.demo.Model.Report;
 import com.example.demo.Service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,7 @@ public class ReportController {
     @Autowired
     private ReportService reportService;
 
-    @PostMapping
+    @PostMapping("invia")
     public ResponseEntity<?> segnalaTeam(@RequestBody ReportDTO reportDTO) {
         try {
             Report reportSalvato = reportService.creaReport(reportDTO);
@@ -35,11 +36,11 @@ public class ReportController {
     }
 
     @GetMapping("/hackathon/{hackathonId}")
-    public ResponseEntity<List<Report>>  getReportPerHackathon(@PathVariable Long hackathonId)
+    public ResponseEntity<List<ReportResponseDTO>>  getReportPerHackathon(@PathVariable Long hackathonId)
     {
-        List<Report> reports = reportService.getSegnalazioniHackathon(hackathonId);
-        if(reports.isEmpty())
-        {
+        List<ReportResponseDTO> reports = reportService.getSegnalazioniHackathon(hackathonId); // <--- E qui
+
+        if (reports.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
 

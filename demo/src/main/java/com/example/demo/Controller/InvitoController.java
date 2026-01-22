@@ -22,12 +22,12 @@ public class InvitoController {
     public ResponseEntity<?> inviaInvito( @RequestParam Long teamId, @RequestParam Long userId) {
 
         Invito invito = invitoService.creaInvito(teamId, userId);
-        return new ResponseEntity<>(invito, HttpStatus.OK);
+        return new ResponseEntity<>("Invito inviato con successo", HttpStatus.OK);
     }
 
     @PutMapping("/{id}/rispondi")
-    public ResponseEntity<?> rispondiInvito( @RequestParam Long invitoId, Long utenteId, boolean risposta ) {
-        Invito aggiornato = invitoService.gestisciRisposta(invitoId, utenteId, risposta);
+    public ResponseEntity<?> rispondiInvito( @PathVariable Long id,@RequestParam Long utenteId,@RequestParam boolean risposta ) {
+        Invito aggiornato = invitoService.gestisciRisposta(id, utenteId, risposta);
         String esito = risposta ? "ACCETTATO (Benvenuto nel team!)" : "RIFIUTATO :(";
         return ResponseEntity.ok("Invito " + esito);
     }

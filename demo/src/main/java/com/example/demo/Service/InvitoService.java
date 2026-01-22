@@ -56,7 +56,7 @@ public class InvitoService {
         {
             throw new SecurityException("L'invito non era per te");
         }
-        if(invito.getStato().equals("PENDING"))
+        if(invito.getStato().equals("ACCETTATO")||(invito.getStato().equals("RIFIUTATO")))
         {
             throw new IllegalStateException("Hai gia risposto a questo invito");
         }
@@ -71,7 +71,9 @@ public class InvitoService {
                 throw  new IllegalStateException("Il team si è riempito prima che potessi accettare l' invito!!! ");
             }
             team.getMembri().add(utente);
+            utente.setTeam(team);
             teamRepository.save(team);
+            utenteRepository.save(utente);
             invito.setStato("ACCETTATO");
         }   else {
             invito.setStato("RIFIUTATO");

@@ -1,6 +1,7 @@
 package com.example.demo.Service;
 
 import com.example.demo.DTO.ReportDTO;
+import com.example.demo.DTO.ReportResponseDTO;
 import com.example.demo.Model.Hackathon;
 import com.example.demo.Model.Report;
 import com.example.demo.Model.Team;
@@ -12,7 +13,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportService {
@@ -28,11 +31,11 @@ public class ReportService {
 
 
     @Transactional
-    public Report creaReport(ReportDTO reportDTO)
-    {
-        Team teamSegnalato = teamRepository.findById(reportDTO.getTeamSegnalatoId()).orElseThrow(()-> new RuntimeException("Team non trovato"));
+    public Report creaReport(ReportDTO reportDTO) {
+        Team teamSegnalato = teamRepository.findById(reportDTO.getTeamSegnalatoId()).orElseThrow(() -> new RuntimeException("Team non trovato"));
 
-        Utente autore= utenteRepository.findById(reportDTO.getAutoreId()).orElseThrow(()-> new RuntimeException("Autore non trovato"));
+        Utente autore = utenteRepository.findById(reportDTO.getAutoreId()).orElseThrow(() -> new RuntimeException("Autore non trovato"));
+
 
         Hackathon hackathon = teamSegnalato.getHackathon();
 
@@ -42,15 +45,25 @@ public class ReportService {
 
         Report report = new Report();
         report.setMotivo(reportDTO.getMotivo());
-        report.setDataSegnalazione(report.getDataSegnalazione());
-        report.setAutore(report.getAutore());
+        report.setDataSegnalazione(LocalDateTime.now());
+        report.setAutore(autore);
         report.setHackathon(hackathon);
         report.setTeamSegnalato(teamSegnalato);
 
         return reportRepository.save(report);
     }
 
-    public List<Report> getSegnalazioniHackathon(Long hackathonId) {
-        return reportRepository.findByHackathonId(hackathonId);
+    public List<ReportResponseDTO> getSegnalazioniHackathon(Long hackathonId) {
+        List<Report> reports = reportRepository.findByHackathonId(hackathonId);
+        return reports.stream().map(report -> {
+            ReportResponseDTO dto = new ReportResponseDTO();
+            dto.setId(report.getId());
+            dto.setMotivo(report.getMotivo());
+            dto.setDataSegnalazione(report.getDataSegnalazione());
+
+            dto.setNomeAutore(report.getAutore().getUsername());
+            dto.setNomeTeamSegnalato(report.getTeamSegnalato().getNome());
+            return dto;
+        }).collect(Collectors.toList());
     }
 }
