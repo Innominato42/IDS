@@ -80,9 +80,6 @@ public class TeamService {
         return teamRepository.findByHackathonId(hackathonId);
     }
 
-    public List<Team> findTeamPerHackathon(Long hackathonId) {
-        return teamRepository.findByHackathonId(hackathonId);
-    }
 
     public Team findById(Long teamId) {
         return teamRepository.findById(teamId).orElseThrow(() -> new RuntimeException("Team non trovato"));

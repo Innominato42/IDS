@@ -29,8 +29,14 @@ public class HackathonService {
     Creo un nuovo Hackathon usando il design pattern Builder
     Con questo metodo riceviamo dati grezzi e li trasformiamo in un oggetto Hackathon completo
      */
-    public Hackathon creaHackathon(String nome, String descrizione, LocalDate dataInizio, LocalDate dataFine, int dimensioneTeam, String regolamento, LocalDate scandenza, String luogo, double premio, Long organizzatoreId) {
+    public Hackathon creaHackathon(String nome, String descrizione, LocalDate dataInizio, LocalDate dataFine, int dimensioneTeam, String regolamento, LocalDate scandenza, String luogo, double premio, Long organizzatoreId,Long giudiceId) {
         Utente organizzatore = utenteRepository.findById(organizzatoreId).orElseThrow(()-> new RuntimeException("Utente non trovato"));
+        Utente giudice = utenteRepository.findById(giudiceId).orElseThrow(()-> new RuntimeException("Utente non trovato"));
+
+        if (!giudice.getRuolo().equals(Ruolo.GIUDICE)) {
+            throw new RuntimeException("ERRORE: Solo gli Organizzatori possono creare un Hackathon!");
+        }
+
         if (!organizzatore.getRuolo().equals(Ruolo.ORGANIZZATORE)) {
             throw new RuntimeException("ERRORE: Solo gli Organizzatori possono creare un Hackathon!");
         }
@@ -45,20 +51,12 @@ public class HackathonService {
                 .creaPremio(premio)
                 .creaScadenzaIscrizioni(scandenza)
                 .build();
+        nuovoHackathon.setGiudice(giudice);
         nuovoHackathon.setOrganizzatore(organizzatore);
         return hackathonRepository.save(nuovoHackathon);
     }
 
 
-    @Transactional
-    public void iscriviTeam(Long hackathonId, Team team) {
-        Hackathon hackathon = hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon not found"));
-
-        hackathon.iscriviTeam(team);
-
-        hackathonRepository.save(hackathon);
-
-    }
 
 
 
@@ -69,12 +67,6 @@ public class HackathonService {
         hackathonRepository.save(hackathon);
     }
 
-    @Transactional
-    public void chiudiHackathonPerValutazione(Long hackathonId) {
-        Hackathon hackathon =hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon not found"));
-        hackathon.cambiaStato(new InValutazioneState());
-        hackathonRepository.save(hackathon);
-    }
 
     @Transactional
     public void concludiHackathon(Long hackathonId) {
@@ -165,9 +157,6 @@ public class HackathonService {
         hackathonRepository.save(hackathon);
     }
 
-    public List<Hackathon> getAllHackathon() {
-        return hackathonRepository.findAll();
-    }
 
     public List<Utente> getMentoriHackathon(Long hackathonId) {
         Hackathon hackathon= hackathonRepository.findById(hackathonId).orElseThrow(() -> new RuntimeException("Hackathon non trovato"));

@@ -118,10 +118,6 @@ public class Hackathon {
         this.statoCorrente.gestisciValutazione(this, sottomissione);
     }
 
-    public void inviaSottomissione(Sottomissione sottomissione)
-    {
-        this.statoCorrente.gestisciSottomissione(sottomissione,this);
-    }
 
     public void addMentore(Utente mentore)
     {

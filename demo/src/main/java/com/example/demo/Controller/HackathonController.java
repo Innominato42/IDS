@@ -25,7 +25,7 @@ public class HackathonController {
         Riceve un HackathonDTO e lo spacchetta fornendo i dati al service
      */
     @PostMapping("/crea")
-    public ResponseEntity<Hackathon> creaHackathon(@RequestBody HackathonDTO hackathonDTO, @RequestParam Long organizzatoreId) {
+    public ResponseEntity<Hackathon> creaHackathon(@RequestBody HackathonDTO hackathonDTO, @RequestParam Long organizzatoreId, @RequestParam Long giudiceId) {
         Hackathon hackathon = hackathonService.creaHackathon(
                 hackathonDTO.getNome(),
                 hackathonDTO.getDescrizione(),
@@ -36,7 +36,8 @@ public class HackathonController {
                 hackathonDTO.getScadenzaIscrizioni(),
                 hackathonDTO.getLuogo(),
                 hackathonDTO.getPremio(),
-                organizzatoreId
+                organizzatoreId,
+                giudiceId
         );
         return ResponseEntity.ok(hackathon);
     }
@@ -49,9 +50,7 @@ public class HackathonController {
     public ResponseEntity<String> iscriviTeam(@PathVariable Long id, @RequestBody TeamDTO teamDTO)
     {
         try{
-            /*
-             * Salvo l id passato come parametro nel DTO per essere sicuro che il team si iscriva all' hackathon specificato
-             */
+
             teamDTO.setHackathonId(id);
 
             Team teamSalvato = teamService.iscriviTeam(teamDTO);
