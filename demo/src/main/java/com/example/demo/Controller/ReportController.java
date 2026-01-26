@@ -28,8 +28,6 @@ public class ReportController {
             return ResponseEntity.status((HttpStatus.FORBIDDEN)).body(e.getMessage());
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(e.getMessage());
         }
@@ -38,7 +36,7 @@ public class ReportController {
     @GetMapping("/hackathon/{hackathonId}")
     public ResponseEntity<List<ReportResponseDTO>>  getReportPerHackathon(@PathVariable Long hackathonId)
     {
-        List<ReportResponseDTO> reports = reportService.getSegnalazioniHackathon(hackathonId); // <--- E qui
+        List<ReportResponseDTO> reports = reportService.getSegnalazioniHackathon(hackathonId);
 
         if (reports.isEmpty()) {
             return ResponseEntity.noContent().build();
