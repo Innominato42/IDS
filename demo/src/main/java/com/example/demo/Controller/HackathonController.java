@@ -42,10 +42,6 @@ public class HackathonController {
         return ResponseEntity.ok(hackathon);
     }
 
-    /*
-        Iscrive un team all hackathon
-        Gli errori vengono gestiti con un try-catch. Se il PatternState lancia un' eccezione viene gestita con un messaggio di errore, anziche un crash del server
-     */
     @PostMapping("/{id}/iscrivi")
     public ResponseEntity<String> iscriviTeam(@PathVariable Long id, @RequestBody TeamDTO teamDTO)
     {

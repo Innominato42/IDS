@@ -63,6 +63,17 @@ public class HackathonBuilder {
         this.hackathon.setRegolamento(regolamento);
         return this;
     }
+
+    public HackathonBuilder creaGiudice(Utente giudice) {
+        this.hackathon.setGiudice(giudice);
+        return this;
+    }
+
+    public HackathonBuilder creaMentore(Utente mentore) {
+        this.hackathon.getMentori().add(mentore);
+        return this;
+    }
+
     public Hackathon build()
     {
         if (this.hackathon.getNome() == null || this.hackathon.getNome().trim().isEmpty()) {
