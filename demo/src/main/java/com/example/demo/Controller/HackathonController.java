@@ -20,10 +20,6 @@ public class HackathonController {
     @Autowired
     private TeamService teamService;
 
-    /*
-        Crea un nuovo Hackathon
-        Riceve un HackathonDTO e lo spacchetta fornendo i dati al service
-     */
     @PostMapping("/crea")
     public ResponseEntity<Hackathon> creaHackathon(@RequestBody HackathonDTO hackathonDTO, @RequestParam Long organizzatoreId, @RequestParam Long giudiceId) {
         Hackathon hackathon = hackathonService.creaHackathon(
